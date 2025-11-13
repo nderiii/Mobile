@@ -1,6 +1,7 @@
 import 'package:bfu/widget/button_widget.dart';
 import 'package:bfu/widget/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:bfu/pages/loginpage.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -46,6 +47,12 @@ class Homepage extends StatelessWidget {
               height: 50,
               color: const Color.fromARGB(255, 109, 4, 230),
               fontWeight: FontWeight.bold,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
             ),
           ),
         ],
