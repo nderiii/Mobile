@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter_form_builder: ^10.2.0
   form_builder_validators: ^11.2.0
+  gestures: ^1.0.0
   
   flutter:
     sdk: flutter

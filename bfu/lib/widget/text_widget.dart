@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 
 class TextWidget extends StatelessWidget {
   final String text;
-  final Color color;
+  final Color? color;
   final FontWeight fontWeight;
   final double fontsize;
+  final TextAlign? align;
+  final double? height;
+  final Color? backgroundColor;
   // final double height;
 
   const TextWidget({
     super.key,
     required this.text,
-    required this.color,
+    this.color,
     required this.fontWeight,
     required this.fontsize,
-    // required this.height,
+    this.align,
+    this.backgroundColor,
+    this.height,
   });
 
   @override
@@ -24,8 +29,9 @@ class TextWidget extends StatelessWidget {
         color: color,
         fontWeight: fontWeight,
         fontSize: fontsize,
-        // height: height,
       ),
+      textAlign: align,
+      // height: height,
     );
   }
 }

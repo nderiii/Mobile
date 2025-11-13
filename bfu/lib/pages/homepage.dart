@@ -1,7 +1,7 @@
 import 'package:bfu/widget/button_widget.dart';
 import 'package:bfu/widget/text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:bfu/pages/loginpage.dart';
+import 'package:bfu/pages/signuppage.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -50,7 +50,7 @@ class Homepage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  MaterialPageRoute(builder: (context) => SignUpPage()),
                 );
               },
             ),
