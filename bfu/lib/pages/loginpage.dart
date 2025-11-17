@@ -148,7 +148,7 @@ class Loginpage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           SizedBox(height: 24),
-                          // OR divider
+                          // OR divide
                           Row(
                             children: [
                               Expanded(
