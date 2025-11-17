@@ -9,7 +9,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -18,7 +18,7 @@ class Homepage extends StatelessWidget {
             padding: EdgeInsets.only(top: 50),
             child: TextWidget(
               text: "Welcome to BFU",
-              color: Color.fromARGB(255, 255, 255, 255),
+              color: Color.fromARGB(255, 12, 0, 0),
               fontWeight: FontWeight.bold,
               fontsize: 30,
             ),
@@ -26,7 +26,7 @@ class Homepage extends StatelessWidget {
           TextWidget(
             text:
                 'Welcome to BFU where we make all your crypto trades possible ',
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: Color.fromARGB(255, 7, 7, 7),
             fontWeight: FontWeight.normal,
             fontsize: 12,
           ),
@@ -35,7 +35,7 @@ class Homepage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 120),
             child: Center(
-              child: Image.asset('images/crypto.jpeg', width: 300, height: 300),
+              child: Image.asset('images/BFU.png', width: 300, height: 300),
             ),
           ),
 
@@ -45,7 +45,7 @@ class Homepage extends StatelessWidget {
               text: 'Get Started',
               width: double.infinity,
               height: 50,
-              color: const Color.fromARGB(255, 109, 4, 230),
+              color: const Color.fromARGB(255, 82, 178, 126),
               fontWeight: FontWeight.bold,
               onPressed: () {
                 Navigator.push(
