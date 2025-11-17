@@ -1,3 +1,4 @@
+import 'package:bfu/services/supabase_apis.dart';
 import 'package:bfu/widget/button_widget.dart';
 import 'package:bfu/widget/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import 'loginpage.dart';
 class SignUpPage extends StatelessWidget {
   final formKey = GlobalKey<FormBuilderState>();
 
+  SignUpPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +19,7 @@ class SignUpPage extends StatelessWidget {
         child: Stack(
           children: [
             // Background image
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 810,
               child: Image.asset('images/BFU.png', fit: BoxFit.cover),
@@ -210,8 +213,9 @@ class SignUpPage extends StatelessWidget {
                                   .currentState
                                   ?.fields['password']
                                   ?.value;
-                              if (val != password)
+                              if (val != password) {
                                 return 'Passwords do not match';
+                              }
                               return null;
                             },
                           ),
@@ -222,14 +226,13 @@ class SignUpPage extends StatelessWidget {
                               if (formKey.currentState!.saveAndValidate()) {
                                 final data = formKey.currentState!.value;
                                 print('Registration Data: $data');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Registration Successful'),
-                                  ),
+
+                                // call my supabase api function
+                                SupabaseApis().createUser(
+                                  data['email'],
+                                  data['password'],
+                                  data['confirm_password'],
                                 );
-                                Future.delayed(Duration(seconds: 1), () {
-                                  Navigator.pop(context);
-                                });
                               }
                             },
                             text: 'Register',

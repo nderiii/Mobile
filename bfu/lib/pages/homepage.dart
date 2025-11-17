@@ -24,8 +24,7 @@ class Homepage extends StatelessWidget {
             ),
           ),
           TextWidget(
-            text:
-                'Welcome to BFU where we make all your crypto trades possible ',
+            text: 'Where we make all your crypto and Stock trades possible ',
             color: Color.fromARGB(255, 7, 7, 7),
             fontWeight: FontWeight.normal,
             fontsize: 12,

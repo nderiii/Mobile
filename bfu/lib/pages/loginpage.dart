@@ -1,4 +1,5 @@
 import 'package:bfu/pages/signuppage.dart';
+import 'package:bfu/services/supabase_apis.dart';
 import 'package:bfu/widget/button_widget.dart';
 import 'package:bfu/widget/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/gestures.dart';
 class Loginpage extends StatelessWidget {
   final formKey = GlobalKey<FormBuilderState>();
 
+  Loginpage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +19,7 @@ class Loginpage extends StatelessWidget {
         child: Stack(
           children: [
             // Background image
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 810,
               child: Image.asset('images/BFU.png', fit: BoxFit.cover),
@@ -133,12 +136,12 @@ class Loginpage extends StatelessWidget {
                               if (formKey.currentState!.saveAndValidate()) {
                                 final data = formKey.currentState!.value;
                                 print('Login Data: $data');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Login Successful')),
+
+                                // call API funtion to login user
+                                SupabaseApis().signIUser(
+                                  data['email'],
+                                  data['password'],
                                 );
-                                Future.delayed(Duration(seconds: 1), () {
-                                  Navigator.pop(context);
-                                });
                               }
                             },
                             text: 'Login',
