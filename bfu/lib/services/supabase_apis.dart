@@ -16,7 +16,7 @@ class SupabaseApis {
   }
 
   // create a new user account
-  Future<AuthResponse> createUser(
+  Future<bool> createUser(
     String email,
     String password,
     String confirmPassword,
@@ -27,17 +27,23 @@ class SupabaseApis {
 
     final res = await supabase.auth.signUp(email: email, password: password);
 
-    final Session? session = res.session;
-    final User? user = res.user;
+    if (res.user != null) {
+      return true; // SIGNUP SUCCESS
+    }
 
-    return res;
+    return false;
   }
 
-  Future<void> signIUser(String email, String password) async {
-    await supabase.auth.signInWithPassword(email: email, password: password);
-  }
+  Future<bool> signIUser(String email, String password) async {
+    final res = await supabase.auth.signInWithPassword(
+      email: email,
+      password: password,
+    );
 
-  Future sessionHandler() async {
-    return supabase.auth.currentSession;
+    if (res.user != null) {
+      return true; // LOGIN SUCCESS
+    }
+
+    return false;
   }
 }

@@ -33,6 +33,7 @@ dependencies:
   gestures: ^1.0.0
   dio: any
   supabase_flutter: any
+  http: ^1.6.0
   
   flutter:
     sdk: flutter

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter/gestures.dart';
+import 'dashboard.dart';
 
 class Loginpage extends StatelessWidget {
   final formKey = GlobalKey<FormBuilderState>();
@@ -132,18 +133,43 @@ class Loginpage extends StatelessWidget {
                           SizedBox(height: 24),
                           // Login button
                           ButtonWidget(
-                            onPressed: () {
+                            onPressed: () async {
                               if (formKey.currentState!.saveAndValidate()) {
                                 final data = formKey.currentState!.value;
                                 print('Login Data: $data');
 
-                                // call API funtion to login user
-                                SupabaseApis().signIUser(
+                                bool success = await SupabaseApis().signIUser(
                                   data['email'],
                                   data['password'],
                                 );
+
+                                if (success) {
+                                  // login success
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Login Successful')),
+                                  );
+                                  // navigate to dashboard after short delay
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => DashboardPage(),
+                                      ),
+                                    );
+                                  });
+                                } else {
+                                  // login failed
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Login failed. Check your credentials.',
+                                      ),
+                                    ),
+                                  );
+                                }
                               }
                             },
+
                             text: 'Login',
                             width: double.infinity,
                             height: 50,

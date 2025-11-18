@@ -6,6 +6,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter/gestures.dart';
 import 'loginpage.dart';
+import 'dashboard.dart';
 
 class SignUpPage extends StatelessWidget {
   final formKey = GlobalKey<FormBuilderState>();
@@ -222,17 +223,39 @@ class SignUpPage extends StatelessWidget {
                           SizedBox(height: 24),
                           // Register Button
                           ButtonWidget(
-                            onPressed: () {
+                            onPressed: () async {
                               if (formKey.currentState!.saveAndValidate()) {
                                 final data = formKey.currentState!.value;
                                 print('Registration Data: $data');
 
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Registration Successful'),
+                                  ),
+                                );
+                                Future.delayed(Duration(seconds: 1), () {
+                                  Navigator.pop(context);
+                                });
+
                                 // call my supabase api function
-                                SupabaseApis().createUser(
+                                final success = await SupabaseApis().createUser(
                                   data['email'],
                                   data['password'],
                                   data['confirm_password'],
                                 );
+
+                                if (success) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DashboardPage(),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Signup failed")),
+                                  );
+                                }
                               }
                             },
                             text: 'Register',
