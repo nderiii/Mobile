@@ -1,0 +1,50 @@
+[
+  {
+    "symbol": "AAPL",
+    "name": "Apple Inc.",
+    "type": "stock",
+    "image": "assets/symbols/aapl.png"
+  },
+  {
+    "symbol": "TSLA",
+    "name": "Tesla Inc.",
+    "type": "stock",
+    "image": "assets/symbols/tsla.png"
+  },
+  {
+    "symbol": "MSFT",
+    "name": "Microsoft Corp.",
+    "type": "stock",
+    "image": "assets/symbols/msft.png"
+  },
+  {
+    "symbol": "GOOGL",
+    "name": "Alphabet Inc.",
+    "type": "stock",
+    "image": "assets/symbols/googl.png"
+  },
+  {
+    "symbol": "BTC",
+    "name": "Bitcoin",
+    "type": "crypto",
+    "image": "assets/symbols/btc.jpeg"
+  },
+  {
+    "symbol": "ETH",
+    "name": "Ethereum",
+    "type": "crypto",
+    "image": "assets/symbols/eth.png"
+  },
+  {
+    "symbol": "DOGE",
+    "name": "Dogecoin",
+    "type": "crypto",
+    "image": "assets/symbols/doge.png"
+  },
+  {
+    "symbol": "XRP",
+    "name": "Ripple",
+    "type": "crypto",
+    "image": "assets/symbols/xrp.png"
+  }
+]

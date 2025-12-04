@@ -1,7 +1,4 @@
-import 'package:bfu/pages/homepage.dart';
 import 'package:bfu/pages/dashboard.dart';
-import 'package:bfu/pages/signuppage.dart';
-import 'package:bfu/pages/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

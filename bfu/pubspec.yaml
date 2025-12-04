@@ -68,6 +68,8 @@ flutter:
   assets:
     - images/crypto.jpeg
     - images/BFU.png
+    - assets/stocks.json
+    - assets/symbols/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
