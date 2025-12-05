@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bfu/services/stock_apis.dart';
+import 'package:bfu/pages/profilepage.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -287,7 +288,7 @@ class _DashboardPageState extends State<DashboardPage>
                         const SizedBox(height: 12),
 
                         SizedBox(
-                          height: 160,
+                          height: 175,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: buildSuggestionCards(),
@@ -340,10 +341,9 @@ class _DashboardPageState extends State<DashboardPage>
                       ],
                     ),
                   ),
-
                   // FLOATING BOTTOM NAV BAR
                   Positioned(
-                    bottom: 20,
+                    bottom: 50,
                     left: 20,
                     right: 20,
                     child: Container(
@@ -386,6 +386,14 @@ class _DashboardPageState extends State<DashboardPage>
     return GestureDetector(
       onTap: () {
         setState(() => _currentIndex = index);
+
+        // Navigate to Profile page when Profile is selected
+        if (index == 3) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Profilepage()),
+          );
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

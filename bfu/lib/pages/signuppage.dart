@@ -1,6 +1,4 @@
 import 'package:bfu/services/supabase_apis.dart';
-import 'package:bfu/widget/button_widget.dart';
-import 'package:bfu/widget/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -16,326 +14,422 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            // Background image
-            SizedBox(
-              width: double.infinity,
-              height: 810,
-              child: Image.asset('images/BFU.png', fit: BoxFit.cover),
+      body: Stack(
+        children: [
+          // Background image with overlay
+          SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: Image.asset('images/BFU.png', fit: BoxFit.cover),
+          ),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.3),
+                  Colors.black.withOpacity(0.7),
+                ],
+              ),
             ),
-            Container(
-              width: double.infinity,
-              height: 810,
-              color: Colors.grey.withOpacity(0.4),
-            ),
-            // Form content
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  children: [
-                    SizedBox(height: 150),
-                    // Title
-                    TextWidget(
-                      text: 'Create an Account',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontsize: 24,
-                      align: TextAlign.center,
+          ),
+
+          // Content
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 40),
+                  // Logo or Title Area
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.2),
+                        width: 1,
+                      ),
                     ),
-                    SizedBox(height: 24),
-                    // Form
-                    FormBuilder(
+                    child: const Icon(
+                      Icons.person_add_outlined,
+                      size: 40,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Join Us Today",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Create your account and start investing",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+
+                  // Sign Up Form Card
+                  Container(
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 25,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: FormBuilder(
                       key: formKey,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          const Text(
+                            "Create Account",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2E7D32),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
                           // Username
                           FormBuilderTextField(
                             name: 'username',
                             decoration: InputDecoration(
                               labelText: 'Username',
-                              hintText: 'Enter Your Username',
-                              prefixIcon: Icon(Icons.person),
+                              hintText: 'Choose a username',
+                              prefixIcon: const Icon(
+                                Icons.person_outline,
+                                color: Color(0xFF4CAF50),
+                              ),
                               filled: true,
-                              fillColor: Colors.grey[200],
+                              fillColor: const Color(0xFFF5F5F5),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide.none,
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    82,
-                                    178,
-                                    126,
-                                  ),
-                                  width: 2,
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF4CAF50),
+                                  width: 1.5,
                                 ),
                               ),
-                            ),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                            cursorColor: const Color.fromARGB(
-                              255,
-                              82,
-                              178,
-                              126,
+                              floatingLabelStyle: const TextStyle(
+                                color: Color(0xFF2E7D32),
+                              ),
                             ),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                               FormBuilderValidators.minLength(3),
                             ]),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 20),
                           // Email
                           FormBuilderTextField(
                             name: 'email',
                             decoration: InputDecoration(
-                              labelText: 'Email',
-                              hintText: 'example@email.com',
-                              prefixIcon: Icon(Icons.mail),
+                              labelText: 'Email Address',
+                              hintText: 'hello@example.com',
+                              prefixIcon: const Icon(
+                                Icons.email_outlined,
+                                color: Color(0xFF4CAF50),
+                              ),
                               filled: true,
-                              fillColor: Colors.grey[200],
+                              fillColor: const Color(0xFFF5F5F5),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide.none,
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    82,
-                                    178,
-                                    126,
-                                  ),
-                                  width: 2,
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF4CAF50),
+                                  width: 1.5,
                                 ),
                               ),
+                              floatingLabelStyle: const TextStyle(
+                                color: Color(0xFF2E7D32),
+                              ),
                             ),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                            cursorColor: const Color.fromARGB(
-                              255,
-                              82,
-                              178,
-                              126,
-                            ),
+                            keyboardType: TextInputType.emailAddress,
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                               FormBuilderValidators.email(),
                             ]),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 20),
                           // Password
                           FormBuilderTextField(
                             name: 'password',
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              prefixIcon: Icon(Icons.lock),
+                              prefixIcon: const Icon(
+                                Icons.lock_outline,
+                                color: Color(0xFF4CAF50),
+                              ),
                               filled: true,
-                              fillColor: Colors.grey[200],
+                              fillColor: const Color(0xFFF5F5F5),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide.none,
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    82,
-                                    178,
-                                    126,
-                                  ),
-                                  width: 2,
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF4CAF50),
+                                  width: 1.5,
                                 ),
                               ),
-                            ),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                            cursorColor: const Color.fromARGB(
-                              255,
-                              82,
-                              178,
-                              126,
+                              floatingLabelStyle: const TextStyle(
+                                color: Color(0xFF2E7D32),
+                              ),
                             ),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                               FormBuilderValidators.minLength(6),
                             ]),
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 20),
                           // Confirm Password
                           FormBuilderTextField(
                             name: 'confirm_password',
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'Confirm Password',
-                              prefixIcon: Icon(Icons.lock),
+                              prefixIcon: const Icon(
+                                Icons.lock_outline,
+                                color: Color(0xFF4CAF50),
+                              ),
                               filled: true,
-                              fillColor: Colors.grey[200],
+                              fillColor: const Color(0xFFF5F5F5),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide.none,
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    82,
-                                    178,
-                                    126,
-                                  ),
-                                  width: 2,
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF4CAF50),
+                                  width: 1.5,
                                 ),
                               ),
-                            ),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                            cursorColor: const Color.fromARGB(
-                              255,
-                              82,
-                              178,
-                              126,
+                              floatingLabelStyle: const TextStyle(
+                                color: Color(0xFF2E7D32),
+                              ),
                             ),
                             validator: (val) {
                               final password = formKey
                                   .currentState
                                   ?.fields['password']
                                   ?.value;
+                              if (val == null || val.isEmpty) {
+                                return 'Please confirm your password';
+                              }
                               if (val != password) {
                                 return 'Passwords do not match';
                               }
                               return null;
                             },
                           ),
-                          SizedBox(height: 24),
-                          // Register Button
-                          ButtonWidget(
-                            onPressed: () async {
-                              if (formKey.currentState!.saveAndValidate()) {
-                                final data = formKey.currentState!.value;
-                                print('Registration Data: $data');
+                          const SizedBox(height: 30),
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Registration Successful'),
-                                  ),
-                                );
-                                Future.delayed(Duration(seconds: 1), () {
-                                  Navigator.pop(context);
-                                });
+                          // Sign Up Button
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(
+                                    0xFF4CAF50,
+                                  ).withOpacity(0.3),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (formKey.currentState!.saveAndValidate()) {
+                                  final data = formKey.currentState!.value;
 
-                                // call my supabase api function
-                                final success = await SupabaseApis().createUser(
-                                  data['email'],
-                                  data['password'],
-                                  data['confirm_password'],
-                                );
+                                  // Call supabase api function
+                                  final success = await SupabaseApis()
+                                      .createUser(
+                                        data['email'],
+                                        data['password'],
+                                        data['confirm_password'],
+                                      );
 
-                                if (success) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DashboardPage(),
-                                    ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("Signup failed")),
-                                  );
+                                  if (success) {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Registration Successful',
+                                          ),
+                                          backgroundColor: Color(0xFF2E7D32),
+                                        ),
+                                      );
+                                      Future.delayed(
+                                        const Duration(milliseconds: 500),
+                                        () {
+                                          if (context.mounted) {
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    const DashboardPage(),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
+                                  } else {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Signup failed'),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
+                                    }
+                                  }
                                 }
-                              }
-                            },
-                            text: 'Register',
-                            width: double.infinity,
-                            height: 50,
-                            color: const Color.fromARGB(255, 82, 178, 126),
-                            fontWeight: FontWeight.bold,
-                          ),
-                          SizedBox(height: 30),
-                          // OR divider
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Divider(
-                                  color: const Color.fromARGB(255, 0, 0, 0),
-                                  thickness: 1,
-                                  endIndent: 10,
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
-                              Text(
-                                'OR',
+                              child: const Text(
+                                'Create Account',
                                 style: TextStyle(
-                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+
+                          // Divider
+                          Row(
+                            children: const [
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey,
+                                  thickness: 0.5,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  "OR",
+                                  style: TextStyle(color: Colors.grey),
                                 ),
                               ),
                               Expanded(
                                 child: Divider(
-                                  color: const Color.fromARGB(255, 0, 0, 0),
-                                  thickness: 1,
-                                  indent: 10,
+                                  color: Colors.grey,
+                                  thickness: 0.5,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
-                          // Login link
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: 'Already have an account? ',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: 'Login',
-                                  style: TextStyle(
-                                    color: const Color.fromARGB(
-                                      255,
-                                      82,
-                                      178,
-                                      126,
-                                    ),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Loginpage(),
-                                        ),
-                                      );
-                                    },
+                          const SizedBox(height: 30),
+
+                          // Login Link
+                          Center(
+                            child: RichText(
+                              text: TextSpan(
+                                text: "Already have an account? ",
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
                                 ),
-                              ],
+                                children: [
+                                  TextSpan(
+                                    text: 'Login',
+                                    style: const TextStyle(
+                                      color: Color(0xFF2E7D32),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Loginpage(),
+                                          ),
+                                        );
+                                      },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          SizedBox(height: 40),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
