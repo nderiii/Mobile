@@ -38,7 +38,7 @@ class Loginpage extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Content
           Center(
             child: SingleChildScrollView(
@@ -53,9 +53,16 @@ class Loginpage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.1),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.2),
+                        width: 1,
+                      ),
                     ),
-                    child: const Icon(Icons.lock_outline, size: 40, color: Colors.white),
+                    child: const Icon(
+                      Icons.lock_outline,
+                      size: 40,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   const Text(
@@ -67,7 +74,7 @@ class Loginpage extends StatelessWidget {
                       letterSpacing: 1.2,
                     ),
                   ),
-                   const SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     "Login to access your portfolio",
                     style: TextStyle(
@@ -111,7 +118,10 @@ class Loginpage extends StatelessWidget {
                             decoration: InputDecoration(
                               labelText: 'Email Address',
                               hintText: 'hello@example.com',
-                              prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF4CAF50)),
+                              prefixIcon: const Icon(
+                                Icons.email_outlined,
+                                color: Color(0xFF4CAF50),
+                              ),
                               filled: true,
                               fillColor: const Color(0xFFF5F5F5),
                               border: OutlineInputBorder(
@@ -124,12 +134,17 @@ class Loginpage extends StatelessWidget {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15.0),
-                                borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 1.5),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF4CAF50),
+                                  width: 1.5,
+                                ),
                               ),
-                              floatingLabelStyle: const TextStyle(color: Color(0xFF2E7D32)),
+                              floatingLabelStyle: const TextStyle(
+                                color: Color(0xFF2E7D32),
+                              ),
                             ),
                             keyboardType: TextInputType.emailAddress,
-                             validator: FormBuilderValidators.compose([
+                            validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                               FormBuilderValidators.email(),
                             ]),
@@ -141,7 +156,10 @@ class Loginpage extends StatelessWidget {
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF4CAF50)),
+                              prefixIcon: const Icon(
+                                Icons.lock_outline,
+                                color: Color(0xFF4CAF50),
+                              ),
                               filled: true,
                               fillColor: const Color(0xFFF5F5F5),
                               border: OutlineInputBorder(
@@ -154,11 +172,16 @@ class Loginpage extends StatelessWidget {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15.0),
-                                borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 1.5),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFF4CAF50),
+                                  width: 1.5,
+                                ),
                               ),
-                               floatingLabelStyle: const TextStyle(color: Color(0xFF2E7D32)),
+                              floatingLabelStyle: const TextStyle(
+                                color: Color(0xFF2E7D32),
+                              ),
                             ),
-                             validator: FormBuilderValidators.compose([
+                            validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                               FormBuilderValidators.minLength(6),
                             ]),
@@ -172,12 +195,15 @@ class Loginpage extends StatelessWidget {
                               },
                               child: const Text(
                                 "Forgot Password?",
-                                style: TextStyle(color: Colors.grey, fontSize: 13),
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 20),
-                          
+
                           // Login Button
                           Container(
                             decoration: BoxDecoration(
@@ -189,7 +215,9 @@ class Loginpage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFF4CAF50).withOpacity(0.3),
+                                  color: const Color(
+                                    0xFF4CAF50,
+                                  ).withOpacity(0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 5),
                                 ),
@@ -199,49 +227,61 @@ class Loginpage extends StatelessWidget {
                               onPressed: () async {
                                 if (formKey.currentState!.saveAndValidate()) {
                                   final data = formKey.currentState!.value;
-                                  
+
                                   // Show loading or disable button here ideally
-                                  
+
                                   bool success = await SupabaseApis().signIUser(
                                     data['email'],
                                     data['password'],
                                   );
 
                                   if (success) {
-                                      if(context.mounted) {
-                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Login Successful'),
-                                            backgroundColor: Color(0xFF2E7D32),
-                                          ),
-                                        );
-                                        Future.delayed(const Duration(milliseconds: 500), () {
-                                            if(context.mounted) {
-                                               Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (_) => const DashboardPage(),
-                                                ),
-                                              );
-                                            }
-                                        });
-                                      }
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Login Successful'),
+                                          backgroundColor: Color(0xFF2E7D32),
+                                        ),
+                                      );
+                                      Future.delayed(
+                                        const Duration(milliseconds: 500),
+                                        () {
+                                          if (context.mounted) {
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    const DashboardPage(),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
                                   } else {
-                                      if(context.mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('Login failed. Check your credentials.'),
-                                            backgroundColor: Colors.redAccent,
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Login failed. Check your credentials.',
                                           ),
-                                        );
-                                      }
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
+                                    }
                                   }
                                 }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 shadowColor: Colors.transparent,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15),
                                 ),
@@ -257,26 +297,42 @@ class Loginpage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 30),
-                          
-                           // Divider
+
+                          // Divider
                           Row(
                             children: const [
-                              Expanded(child: Divider(color: Colors.grey, thickness: 0.5)),
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey,
+                                  thickness: 0.5,
+                                ),
+                              ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 16),
-                                child: Text("OR", style: TextStyle(color: Colors.grey)),
+                                child: Text(
+                                  "OR",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
-                              Expanded(child: Divider(color: Colors.grey, thickness: 0.5)),
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey,
+                                  thickness: 0.5,
+                                ),
+                              ),
                             ],
                           ),
-                           const SizedBox(height: 30),
-                          
+                          const SizedBox(height: 30),
+
                           // Sign Up
-                           Center(
-                             child: RichText(
+                          Center(
+                            child: RichText(
                               text: TextSpan(
                                 text: "Don't have an account? ",
-                                style: const TextStyle(color: Colors.grey, fontSize: 15),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
                                 children: [
                                   TextSpan(
                                     text: 'Sign Up',
@@ -296,8 +352,8 @@ class Loginpage extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                            ),
                           ),
-                           ),
                         ],
                       ),
                     ),
