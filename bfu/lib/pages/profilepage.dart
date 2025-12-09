@@ -17,6 +17,7 @@ class _ProfilepageState extends State<Profilepage> {
   String _investmentGoal = 'Long-term Growth';
   String _timeHorizon = '3-5 years';
   List<String> _preferredSectors = ['Technology', 'Healthcare'];
+  int _currentIndex = 3;
 
   @override
   void dispose() {
@@ -28,16 +29,19 @@ class _ProfilepageState extends State<Profilepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: CustomScrollView(
-        slivers: [
-          // Custom App Bar with Profile Header
-          SliverAppBar(
-            expandedHeight: 280,
-            floating: false,
-            pinned: true,
-            backgroundColor: const Color(0xFF4CAF50),
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              // HEADER WITH PROFILE
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  MediaQuery.of(context).padding.top + 20,
+                  20,
+                  30,
+                ),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)],
@@ -45,528 +49,458 @@ class _ProfilepageState extends State<Profilepage> {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 40),
-                      // Profile Picture with Edit Button
-                      Stack(
-                        children: [
-                          Container(
-                            width: 110,
-                            height: 110,
+                child: Column(
+                  children: [
+                    // Profile Picture
+                    Stack(
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 3,
+                                blurRadius: 15,
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            size: 50,
+                            color: Color(0xFF4CAF50),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              shape: BoxShape.circle,
                               color: Colors.white,
+                              shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 3,
-                                  blurRadius: 15,
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 8,
                                 ),
                               ],
                             ),
                             child: const Icon(
-                              Icons.person,
-                              size: 55,
+                              Icons.camera_alt,
+                              size: 16,
                               color: Color(0xFF4CAF50),
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'John Doe',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'john.doe@example.com',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // SCROLLABLE CONTENT
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 120),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // INVESTMENT PREFERENCES HEADER
+                        const Text(
+                          'Investment Preferences',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // BUDGET CARD
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: const Color(
+                                        0xFF4CAF50,
+                                      ).withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Icon(
+                                      Icons.attach_money,
+                                      color: Color(0xFF4CAF50),
+                                      size: 24,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'Investment Budget',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
                                   ),
                                 ],
                               ),
-                              child: const Icon(
-                                Icons.camera_alt,
-                                size: 18,
-                                color: Color(0xFF4CAF50),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'John Doe',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'john.doe@example.com',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // Content
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Investment Budget Section
-                  const Text(
-                    'Investment Preferences',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Budget Input Card
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF4CAF50).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: const Icon(
-                                Icons.attach_money,
-                                color: Color(0xFF4CAF50),
-                                size: 24,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            const Text(
-                              'Investment Budget',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _budgetController,
-                          keyboardType: TextInputType.number,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4CAF50),
-                          ),
-                          decoration: InputDecoration(
-                            prefixText: '\$ ',
-                            prefixStyle: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF4CAF50),
-                            ),
-                            hintText: 'Enter amount',
-                            filled: true,
-                            fillColor: const Color(0xFFF5F5F5),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'This is the amount you\'re willing to invest',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Risk Tolerance
-                  _buildSelectionCard(
-                    icon: Icons.speed,
-                    title: 'Risk Tolerance',
-                    subtitle: 'How much risk can you handle?',
-                    selectedValue: _riskTolerance,
-                    options: ['Conservative', 'Moderate', 'Aggressive'],
-                    onChanged: (value) {
-                      setState(() => _riskTolerance = value!);
-                    },
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Investment Goal
-                  _buildSelectionCard(
-                    icon: Icons.flag_outlined,
-                    title: 'Investment Goal',
-                    subtitle: 'What are you investing for?',
-                    selectedValue: _investmentGoal,
-                    options: [
-                      'Short-term Gains',
-                      'Long-term Growth',
-                      'Retirement',
-                      'Passive Income',
-                    ],
-                    onChanged: (value) {
-                      setState(() => _investmentGoal = value!);
-                    },
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Time Horizon
-                  _buildSelectionCard(
-                    icon: Icons.schedule,
-                    title: 'Time Horizon',
-                    subtitle: 'How long do you plan to invest?',
-                    selectedValue: _timeHorizon,
-                    options: [
-                      'Less than 1 year',
-                      '1-3 years',
-                      '3-5 years',
-                      '5+ years',
-                    ],
-                    onChanged: (value) {
-                      setState(() => _timeHorizon = value!);
-                    },
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Preferred Sectors
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF4CAF50).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: const Icon(
-                                Icons.category_outlined,
-                                color: Color(0xFF4CAF50),
-                                size: 24,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            const Text(
-                              'Preferred Sectors',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Select industries you\'re interested in',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children:
-                              [
-                                'Technology',
-                                'Healthcare',
-                                'Finance',
-                                'Energy',
-                                'Real Estate',
-                                'Consumer Goods',
-                              ].map((sector) {
-                                final isSelected = _preferredSectors.contains(
-                                  sector,
-                                );
-                                return FilterChip(
-                                  label: Text(sector),
-                                  selected: isSelected,
-                                  onSelected: (selected) {
-                                    setState(() {
-                                      if (selected) {
-                                        _preferredSectors.add(sector);
-                                      } else {
-                                        _preferredSectors.remove(sector);
-                                      }
-                                    });
-                                  },
-                                  selectedColor: const Color(
-                                    0xFF4CAF50,
-                                  ).withOpacity(0.2),
-                                  checkmarkColor: const Color(0xFF4CAF50),
-                                  labelStyle: TextStyle(
-                                    color: isSelected
-                                        ? const Color(0xFF4CAF50)
-                                        : Colors.grey[700],
-                                    fontWeight: isSelected
-                                        ? FontWeight.w600
-                                        : FontWeight.normal,
+                              const SizedBox(height: 16),
+                              TextField(
+                                controller: _budgetController,
+                                keyboardType: TextInputType.number,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF4CAF50),
+                                ),
+                                decoration: InputDecoration(
+                                  prefixText: '\$ ',
+                                  prefixStyle: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF4CAF50),
                                   ),
-                                );
-                              }).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Save Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Row(
-                              children: [
-                                Icon(Icons.check_circle, color: Colors.white),
-                                SizedBox(width: 12),
-                                Text('Preferences saved successfully'),
-                              ],
-                            ),
-                            backgroundColor: const Color(0xFF4CAF50),
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Save Preferences',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Account Stats
-                  const Text(
-                    'Your Activity',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildStatCard(
-                          'Favorites',
-                          '12',
-                          Icons.favorite,
-                          const Color(0xFFE91E63),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _buildStatCard(
-                          'Recommendations',
-                          '8',
-                          Icons.lightbulb_outline,
-                          const Color(0xFFFF9800),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  // Account Settings
-                  const Text(
-                    'Account Settings',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  _buildMenuCard(
-                    icon: Icons.person_outline,
-                    title: 'Edit Profile',
-                    subtitle: 'Update your personal information',
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 12),
-                  _buildMenuCard(
-                    icon: Icons.notifications_outlined,
-                    title: 'Notifications',
-                    subtitle: 'Manage alerts and notifications',
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 12),
-                  _buildMenuCard(
-                    icon: Icons.help_outline,
-                    title: 'Help & Support',
-                    subtitle: 'Get help and contact us',
-                    onTap: () {},
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  // Save Button
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   height: 56,
-                  //   child: ElevatedButton(
-                  //     onPressed: () {
-                  //       ScaffoldMessenger.of(context).showSnackBar(
-                  //         SnackBar(
-                  //           content: const Row(
-                  //             children: [
-                  //               Icon(Icons.check_circle, color: Colors.white),
-                  //               SizedBox(width: 12),
-                  //               Text('Preferences saved successfully'),
-                  //             ],
-                  //           ),
-                  //           backgroundColor: const Color(0xFF4CAF50),
-                  //           behavior: SnackBarBehavior.floating,
-                  //           shape: RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(10),
-                  //           ),
-                  //         ),
-                  //       );
-                  //     },
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: const Color(0xFF4CAF50),
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(15),
-                  //       ),
-                  //       elevation: 0,
-                  //     ),
-                  //     child: const Text(
-                  //       'Save Preferences',
-                  //       style: TextStyle(
-                  //         fontSize: 16,
-                  //         fontWeight: FontWeight.w600,
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  const SizedBox(height: 16),
-
-                  // Sign Out Button
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(15),
-                        onTap: () => _showSignOutDialog(context),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFEBEE),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: const Icon(
-                                  Icons.logout,
-                                  color: Color(0xFFE53935),
-                                  size: 24,
+                                  hintText: 'Enter amount',
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F5F5),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 16,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 16),
-                              const Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // RISK TOLERANCE
+                        _buildSelectionCard(
+                          icon: Icons.speed,
+                          title: 'Risk Tolerance',
+                          selectedValue: _riskTolerance,
+                          options: ['Conservative', 'Moderate', 'Aggressive'],
+                          onChanged: (value) {
+                            setState(() => _riskTolerance = value!);
+                          },
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // INVESTMENT GOAL
+                        _buildSelectionCard(
+                          icon: Icons.flag_outlined,
+                          title: 'Investment Goal',
+                          selectedValue: _investmentGoal,
+                          options: [
+                            'Short-term Gains',
+                            'Long-term Growth',
+                            'Retirement',
+                            'Passive Income',
+                          ],
+                          onChanged: (value) {
+                            setState(() => _investmentGoal = value!);
+                          },
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // TIME HORIZON
+                        _buildSelectionCard(
+                          icon: Icons.schedule,
+                          title: 'Time Horizon',
+                          selectedValue: _timeHorizon,
+                          options: [
+                            'Less than 1 year',
+                            '1-3 years',
+                            '3-5 years',
+                            '5+ years',
+                          ],
+                          onChanged: (value) {
+                            setState(() => _timeHorizon = value!);
+                          },
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // PREFERRED SECTORS
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: const Color(
+                                        0xFF4CAF50,
+                                      ).withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Icon(
+                                      Icons.category_outlined,
+                                      color: Color(0xFF4CAF50),
+                                      size: 24,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'Preferred Sectors',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children:
+                                    [
+                                      'Technology',
+                                      'Healthcare',
+                                      'Finance',
+                                      'Energy',
+                                      'Real Estate',
+                                      'Consumer',
+                                    ].map((sector) {
+                                      final isSelected = _preferredSectors
+                                          .contains(sector);
+                                      return FilterChip(
+                                        label: Text(sector),
+                                        selected: isSelected,
+                                        onSelected: (selected) {
+                                          setState(() {
+                                            if (selected) {
+                                              _preferredSectors.add(sector);
+                                            } else {
+                                              _preferredSectors.remove(sector);
+                                            }
+                                          });
+                                        },
+                                        selectedColor: const Color(
+                                          0xFF4CAF50,
+                                        ).withOpacity(0.2),
+                                        checkmarkColor: const Color(0xFF4CAF50),
+                                        labelStyle: TextStyle(
+                                          color: isSelected
+                                              ? const Color(0xFF4CAF50)
+                                              : Colors.grey[700],
+                                          fontWeight: isSelected
+                                              ? FontWeight.w600
+                                              : FontWeight.normal,
+                                        ),
+                                      );
+                                    }).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // ACTIVITY STATS
+                        const Text(
+                          'Your Activity',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildStatCard(
+                                'Favorites',
+                                '12',
+                                Icons.favorite,
+                                const Color(0xFFE91E63),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _buildStatCard(
+                                'Recommendations',
+                                '8',
+                                Icons.lightbulb_outline,
+                                const Color(0xFFFF9800),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // ACCOUNT SETTINGS
+                        const Text(
+                          'Account Settings',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        _buildMenuCard(
+                          icon: Icons.person_outline,
+                          title: 'Edit Profile',
+                          onTap: () {},
+                        ),
+                        const SizedBox(height: 12),
+                        _buildMenuCard(
+                          icon: Icons.notifications_outlined,
+                          title: 'Notifications',
+                          onTap: () {},
+                        ),
+                        const SizedBox(height: 12),
+                        _buildMenuCard(
+                          icon: Icons.help_outline,
+                          title: 'Help & Support',
+                          onTap: () {},
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // SAVE BUTTON
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Row(
+                                    children: [
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 12),
+                                      Text('Preferences saved successfully'),
+                                    ],
+                                  ),
+                                  backgroundColor: const Color(0xFF4CAF50),
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF4CAF50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              'Save Preferences',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // SIGN OUT BUTTON
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(15),
+                              onTap: () => _showSignOutDialog(context),
+                              child: const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                    Icon(
+                                      Icons.logout,
+                                      color: Color(0xFFE53935),
+                                      size: 24,
+                                    ),
+                                    SizedBox(width: 12),
                                     Text(
                                       'Sign Out',
                                       style: TextStyle(
@@ -575,43 +509,93 @@ class _ProfilepageState extends State<Profilepage> {
                                         color: Color(0xFFE53935),
                                       ),
                                     ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      'Sign out from your account',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
-                              const Icon(
-                                Icons.chevron_right,
-                                color: Color(0xFFE53935),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+
+                        const SizedBox(height: 30),
+                      ],
                     ),
                   ),
+                ),
+              ),
+            ],
+          ),
 
-                  const SizedBox(height: 30),
-
-                  // App Version
-                  Center(
-                    child: Text(
-                      'Version 1.0.0',
-                      style: TextStyle(color: Colors.grey[400], fontSize: 12),
-                    ),
+          // FLOATING BOTTOM NAV BAR
+          Positioned(
+            bottom: 50,
+            left: 20,
+            right: 20,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   ),
-                  const SizedBox(height: 20),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildNavItem(Icons.home, "Home", 0),
+                  _buildNavItem(Icons.explore, "Explore", 1),
+                  _buildNavItem(Icons.article, "News", 2),
+                  _buildNavItem(Icons.person_outline, "Profile", 3),
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, int index) {
+    final isSelected = _currentIndex == index;
+    return GestureDetector(
+      onTap: () {
+        setState(() => _currentIndex = index);
+
+        if (index == 0) {
+          Navigator.pop(context); // Go back to dashboard
+        }
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF4CAF50) : Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? Colors.white : Colors.grey,
+              size: 24,
+            ),
+            if (isSelected) ...[
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -665,7 +649,6 @@ class _ProfilepageState extends State<Profilepage> {
   Widget _buildSelectionCard({
     required IconData icon,
     required String title,
-    required String subtitle,
     required String selectedValue,
     required List<String> options,
     required void Function(String?) onChanged,
@@ -697,24 +680,12 @@ class _ProfilepageState extends State<Profilepage> {
                 child: Icon(icon, color: const Color(0xFF4CAF50), size: 24),
               ),
               const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                    ),
-                  ],
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
                 ),
               ),
             ],
@@ -756,7 +727,6 @@ class _ProfilepageState extends State<Profilepage> {
   Widget _buildMenuCard({
     required IconData icon,
     required String title,
-    required String subtitle,
     required VoidCallback onTap,
   }) {
     return Container(
@@ -790,26 +760,13 @@ class _ProfilepageState extends State<Profilepage> {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
                 const Icon(Icons.chevron_right, color: Colors.grey),
