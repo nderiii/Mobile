@@ -450,7 +450,7 @@ class _DashboardPageState extends State<DashboardPage>
 
                   // FLOATING BOTTOM NAV BAR
                   Positioned(
-                    bottom: 50,
+                    bottom: 30,
                     left: 20,
                     right: 20,
                     child: Container(

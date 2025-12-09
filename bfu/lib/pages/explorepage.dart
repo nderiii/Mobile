@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:bfu/services/stock_apis.dart';
 import 'package:bfu/pages/profilepage.dart';
+import 'package:bfu/pages/dashboard.dart';
+import 'package:bfu/pages/newspage.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});

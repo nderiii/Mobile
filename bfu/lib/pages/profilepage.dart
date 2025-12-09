@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:bfu/widget/button_widget.dart';
 import 'package:bfu/widget/text_widget.dart';
 
@@ -20,8 +21,23 @@ class _ProfilepageState extends State<Profilepage> {
   int _currentIndex = 3;
 
   @override
+  void initState() {
+    super.initState();
+    // Hide system navigation bar
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top],
+    );
+  }
+
+  @override
   void dispose() {
     _budgetController.dispose();
+    // Restore system navigation bar when leaving
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+      overlays: SystemUiOverlay.values,
+    );
     super.dispose();
   }
 
@@ -122,7 +138,7 @@ class _ProfilepageState extends State<Profilepage> {
               // SCROLLABLE CONTENT
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(bottom: 120),
+                  padding: const EdgeInsets.only(bottom: 80),
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -525,31 +541,44 @@ class _ProfilepageState extends State<Profilepage> {
             ],
           ),
 
-          // FLOATING BOTTOM NAV BAR
+          // INSTAGRAM-STYLE BOTTOM NAV BAR
           Positioned(
-            bottom: 50,
-            left: 20,
-            right: 20,
+            bottom: 0,
+            left: 0,
+            right: 0,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
+              height: 60,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.grey.withOpacity(0.2),
+                    width: 0.5,
                   ),
-                ],
+                ),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildNavItem(Icons.home, "Home", 0),
-                  _buildNavItem(Icons.explore, "Explore", 1),
-                  _buildNavItem(Icons.article, "News", 2),
-                  _buildNavItem(Icons.person_outline, "Profile", 3),
+                  _buildNavItem(Icons.home_outlined, Icons.home, "Home", 0),
+                  _buildNavItem(
+                    Icons.explore_outlined,
+                    Icons.explore,
+                    "Explore",
+                    1,
+                  ),
+                  _buildNavItem(
+                    Icons.article_outlined,
+                    Icons.article,
+                    "News",
+                    2,
+                  ),
+                  _buildNavItem(
+                    Icons.person_outline,
+                    Icons.person,
+                    "Profile",
+                    3,
+                  ),
                 ],
               ),
             ),
@@ -559,7 +588,12 @@ class _ProfilepageState extends State<Profilepage> {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
+  Widget _buildNavItem(
+    IconData outlinedIcon,
+    IconData filledIcon,
+    String label,
+    int index,
+  ) {
     final isSelected = _currentIndex == index;
     return GestureDetector(
       onTap: () {
@@ -567,34 +601,18 @@ class _ProfilepageState extends State<Profilepage> {
 
         if (index == 0) {
           Navigator.pop(context); // Go back to dashboard
+        } else if (index == 1) {
+          Navigator.pushNamed(context, '/explore');
+        } else if (index == 2) {
+          Navigator.pushNamed(context, '/news');
         }
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF4CAF50) : Colors.transparent,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.white : Colors.grey,
-              size: 24,
-            ),
-            if (isSelected) ...[
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Icon(
+          isSelected ? filledIcon : outlinedIcon,
+          color: isSelected ? Colors.black : Colors.grey,
+          size: 28,
         ),
       ),
     );
