@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bfu/widget/button_widget.dart';
-import 'package:bfu/widget/text_widget.dart';
 
 class Profilepage extends StatefulWidget {
   const Profilepage({super.key});
@@ -17,7 +15,7 @@ class _ProfilepageState extends State<Profilepage> {
   String _riskTolerance = 'Moderate';
   String _investmentGoal = 'Long-term Growth';
   String _timeHorizon = '3-5 years';
-  List<String> _preferredSectors = ['Technology', 'Healthcare'];
+  final List<String> _preferredSectors = ['Technology', 'Healthcare'];
   int _currentIndex = 3;
 
   @override
@@ -539,49 +537,6 @@ class _ProfilepageState extends State<Profilepage> {
                 ),
               ),
             ],
-          ),
-
-          // INSTAGRAM-STYLE BOTTOM NAV BAR
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.grey.withOpacity(0.2),
-                    width: 0.5,
-                  ),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavItem(Icons.home_outlined, Icons.home, "Home", 0),
-                  _buildNavItem(
-                    Icons.explore_outlined,
-                    Icons.explore,
-                    "Explore",
-                    1,
-                  ),
-                  _buildNavItem(
-                    Icons.article_outlined,
-                    Icons.article,
-                    "News",
-                    2,
-                  ),
-                  _buildNavItem(
-                    Icons.person_outline,
-                    Icons.person,
-                    "Profile",
-                    3,
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),

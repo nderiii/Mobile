@@ -6,10 +6,73 @@ import 'package:flutter/gestures.dart';
 import 'loginpage.dart';
 import 'dashboard.dart';
 
-class SignUpPage extends StatelessWidget {
-  final formKey = GlobalKey<FormBuilderState>();
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
-  SignUpPage({super.key});
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  final formKey = GlobalKey<FormBuilderState>();
+  bool isLoading = false;
+  bool obscurePassword = true;
+  bool obscureConfirmPassword = true;
+
+  Future<void> _handleSignup() async {
+    if (!formKey.currentState!.saveAndValidate()) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final data = formKey.currentState!.value;
+
+    final result = await SupabaseApis().createUser(
+      data['email'],
+      data['password'],
+      data['confirm_password'],
+      username: data['username'],
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (result.success) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registration Successful'),
+            backgroundColor: Color(0xFF2E7D32),
+          ),
+        );
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const DashboardPage()),
+            );
+          }
+        });
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              result.errorMessage ?? 'Signup failed. Please try again.',
+            ),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +176,7 @@ class SignUpPage extends StatelessWidget {
                           // Username
                           FormBuilderTextField(
                             name: 'username',
+                            enabled: !isLoading,
                             decoration: InputDecoration(
                               labelText: 'Username',
                               hintText: 'Choose a username',
@@ -150,6 +214,7 @@ class SignUpPage extends StatelessWidget {
                           // Email
                           FormBuilderTextField(
                             name: 'email',
+                            enabled: !isLoading,
                             decoration: InputDecoration(
                               labelText: 'Email Address',
                               hintText: 'hello@example.com',
@@ -188,12 +253,26 @@ class SignUpPage extends StatelessWidget {
                           // Password
                           FormBuilderTextField(
                             name: 'password',
-                            obscureText: true,
+                            enabled: !isLoading,
+                            obscureText: obscurePassword,
                             decoration: InputDecoration(
                               labelText: 'Password',
                               prefixIcon: const Icon(
                                 Icons.lock_outline,
                                 color: Color(0xFF4CAF50),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  obscurePassword
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    obscurePassword = !obscurePassword;
+                                  });
+                                },
                               ),
                               filled: true,
                               fillColor: const Color(0xFFF5F5F5),
@@ -225,12 +304,27 @@ class SignUpPage extends StatelessWidget {
                           // Confirm Password
                           FormBuilderTextField(
                             name: 'confirm_password',
-                            obscureText: true,
+                            enabled: !isLoading,
+                            obscureText: obscureConfirmPassword,
                             decoration: InputDecoration(
                               labelText: 'Confirm Password',
                               prefixIcon: const Icon(
                                 Icons.lock_outline,
                                 color: Color(0xFF4CAF50),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  obscureConfirmPassword
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    obscureConfirmPassword =
+                                        !obscureConfirmPassword;
+                                  });
+                                },
                               ),
                               filled: true,
                               fillColor: const Color(0xFFF5F5F5),
@@ -289,59 +383,7 @@ class SignUpPage extends StatelessWidget {
                               ],
                             ),
                             child: ElevatedButton(
-                              onPressed: () async {
-                                if (formKey.currentState!.saveAndValidate()) {
-                                  final data = formKey.currentState!.value;
-
-                                  // Call supabase api function
-                                  final success = await SupabaseApis()
-                                      .createUser(
-                                        data['email'],
-                                        data['password'],
-                                        data['confirm_password'],
-                                      );
-
-                                  if (success) {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Registration Successful',
-                                          ),
-                                          backgroundColor: Color(0xFF2E7D32),
-                                        ),
-                                      );
-                                      Future.delayed(
-                                        const Duration(milliseconds: 500),
-                                        () {
-                                          if (context.mounted) {
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) =>
-                                                    const DashboardPage(),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      );
-                                    }
-                                  } else {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Signup failed'),
-                                          backgroundColor: Colors.redAccent,
-                                        ),
-                                      );
-                                    }
-                                  }
-                                }
-                              },
+                              onPressed: isLoading ? null : _handleSignup,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 shadowColor: Colors.transparent,
@@ -352,21 +394,33 @@ class SignUpPage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
-                              child: const Text(
-                                'Create Account',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              child: isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Create Account',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                           const SizedBox(height: 30),
 
                           // Divider
-                          Row(
-                            children: const [
+                          const Row(
+                            children: [
                               Expanded(
                                 child: Divider(
                                   color: Colors.grey,
@@ -408,12 +462,15 @@ class SignUpPage extends StatelessWidget {
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Loginpage(),
-                                          ),
-                                        );
+                                        if (!isLoading) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Loginpage(),
+                                            ),
+                                          );
+                                        }
                                       },
                                   ),
                                 ],

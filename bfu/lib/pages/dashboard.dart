@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:bfu/services/stock_apis.dart';
 import 'package:bfu/pages/profilepage.dart';
+import 'package:bfu/pages/explorepage.dart';
+import 'package:bfu/pages/newspage.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -53,433 +55,397 @@ class _DashboardPageState extends State<DashboardPage>
       allSymbols = symbols;
       prices = await api.fetchAllPricesParallel();
       _animationController.forward();
-    } catch (e, s) {
-      print("ERROR IN DASHBOARD: $e");
-      print(s);
-    }
+    } catch (_) {}
 
     setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final filteredSymbols = allSymbols
-        .where(
-          (item) => item["symbol"].toString().toLowerCase().contains(
-            searchQuery.toLowerCase(),
-          ),
-        )
-        .toList();
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : FadeTransition(
-              opacity: _fadeAnimation,
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          : SafeArea(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Stack(
+                  children: [
+                    // MAIN CONTENT - Switch between pages based on _currentIndex
+                    IndexedStack(
+                      index: _currentIndex,
                       children: [
-                        const SizedBox(height: 35),
+                        // HOME PAGE (Index 0)
+                        _buildHomePage(),
 
-                        // HEADER
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Welcome Back",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Investment Advisor",
-                                  style: TextStyle(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(Icons.notifications_outlined),
-                            ),
-                          ],
-                        ),
+                        // EXPLORE PAGE (Index 1)
+                        const ExplorePage(),
 
-                        const SizedBox(height: 24),
+                        // NEWS PAGE (Index 2)
+                        const NewsPage(),
 
-                        // SEARCH BAR
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: TextField(
-                            onChanged: (value) {
-                              setState(() => searchQuery = value);
-                            },
-                            decoration: const InputDecoration(
-                              hintText: "Search stocks, crypto...",
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                              icon: Icon(Icons.search, color: Colors.grey),
-                              contentPadding: EdgeInsets.symmetric(
-                                vertical: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // INVESTMENT BUDGET CARD
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF4CAF50).withOpacity(0.3),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Your Investment Budget",
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        "\$5,000.00",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 36,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: -1,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: const Icon(
-                                      Icons.account_balance_wallet,
-                                      color: Colors.white,
-                                      size: 32,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF81C784),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons.check_circle,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                        SizedBox(width: 4),
-                                        Text(
-                                          "Moderate Risk",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: const Text(
-                                      "8 Recommendations",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // QUICK STATS
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildQuickStatCard(
-                                'Favorites',
-                                '12',
-                                Icons.favorite,
-                                const Color(0xFFE91E63),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildQuickStatCard(
-                                'Watchlist',
-                                '8',
-                                Icons.visibility,
-                                const Color(0xFF2196F3),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        // RECOMMENDATIONS FOR YOU
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Recommended for You",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Based on your preferences",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Text("See All"),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-
-                        SizedBox(
-                          height: 200,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
-                            children: buildRecommendationCards(),
-                          ),
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        // YOUR FAVORITES
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.favorite,
-                                  color: Color(0xFFE91E63),
-                                  size: 24,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  "Your Favorites",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Text("Manage"),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        ...buildFavoriteTiles(),
-
-                        const SizedBox(height: 32),
-
-                        // TRENDING STOCKS
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.trending_up,
-                                  color: Color(0xFF4CAF50),
-                                  size: 24,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  "Trending Stocks",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Text("View All"),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        ...buildMarketTiles(type: "stock"),
-
-                        const SizedBox(height: 24),
-
-                        // TRENDING CRYPTO
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.currency_bitcoin,
-                                  color: Color(0xFFFF9800),
-                                  size: 24,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  "Trending Crypto",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Text("View All"),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        ...buildMarketTiles(type: "crypto"),
+                        // PROFILE PAGE (Index 3)
+                        const Profilepage(),
                       ],
                     ),
-                  ),
 
-                  // FLOATING BOTTOM NAV BAR
-                  Positioned(
-                    bottom: 30,
-                    left: 20,
-                    right: 20,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildNavItem(Icons.home, "Home", 0),
-                          _buildNavItem(Icons.explore, "Explore", 1),
-                          _buildNavItem(Icons.article, "News", 2),
-                          _buildNavItem(Icons.person_outline, "Profile", 3),
-                        ],
+                    // FLOATING BOTTOM NAV BAR - Stays fixed
+                    Positioned(
+                      bottom: 0,
+                      left: 20,
+                      right: 20,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildNavItem(Icons.home, "Home", 0),
+                            _buildNavItem(Icons.explore, "Explore", 1),
+                            _buildNavItem(Icons.article, "News", 2),
+                            _buildNavItem(Icons.person_outline, "Profile", 3),
+                          ],
+                        ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+    );
+  }
+
+  // HOME PAGE CONTENT
+  Widget _buildHomePage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 35),
+
+          // HEADER
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Welcome Back",
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "Investment Advisor",
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Icon(Icons.notifications_outlined),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // SEARCH BAR
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
+            child: TextField(
+              onChanged: (value) {
+                setState(() => searchQuery = value);
+              },
+              decoration: const InputDecoration(
+                hintText: "Search stocks, crypto...",
+                hintStyle: TextStyle(color: Colors.grey),
+                border: InputBorder.none,
+                icon: Icon(Icons.search, color: Colors.grey),
+                contentPadding: EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // INVESTMENT BUDGET CARD
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Your Investment Budget",
+                          style: TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "\$5,000.00",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: const Icon(
+                        Icons.account_balance_wallet,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF81C784),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            "Moderate Risk",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Text(
+                        "8 Recommendations",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // QUICK STATS
+          Row(
+            children: [
+              Expanded(
+                child: _buildQuickStatCard(
+                  'Favorites',
+                  '12',
+                  Icons.favorite,
+                  const Color(0xFFE91E63),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildQuickStatCard(
+                  'Watchlist',
+                  '8',
+                  Icons.visibility,
+                  const Color(0xFF2196F3),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 32),
+
+          // RECOMMENDATIONS FOR YOU
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Recommended for You",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "Based on your preferences",
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                ],
+              ),
+              TextButton(onPressed: () {}, child: const Text("See All")),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          SizedBox(
+            height: 200,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              children: buildRecommendationCards(),
+            ),
+          ),
+
+          const SizedBox(height: 32),
+
+          // YOUR FAVORITES
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Icon(Icons.favorite, color: Color(0xFFE91E63), size: 24),
+                  SizedBox(width: 8),
+                  Text(
+                    "Your Favorites",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              TextButton(onPressed: () {}, child: const Text("Manage")),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...buildFavoriteTiles(),
+
+          const SizedBox(height: 32),
+
+          // TRENDING STOCKS
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Icon(Icons.trending_up, color: Color(0xFF4CAF50), size: 24),
+                  SizedBox(width: 8),
+                  Text(
+                    "Trending Stocks",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              TextButton(onPressed: () {}, child: const Text("View All")),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ...buildMarketTiles(type: "stock"),
+
+          const SizedBox(height: 24),
+
+          // TRENDING CRYPTO
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Icon(
+                    Icons.currency_bitcoin,
+                    color: Color(0xFFFF9800),
+                    size: 24,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    "Trending Crypto",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              TextButton(onPressed: () {}, child: const Text("View All")),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ...buildMarketTiles(type: "crypto"),
+        ],
+      ),
     );
   }
 
@@ -489,14 +455,6 @@ class _DashboardPageState extends State<DashboardPage>
     return GestureDetector(
       onTap: () {
         setState(() => _currentIndex = index);
-
-        // Navigate to Profile page when Profile is selected
-        if (index == 3) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Profilepage()),
-          );
-        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -543,7 +501,7 @@ class _DashboardPageState extends State<DashboardPage>
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -554,7 +512,7 @@ class _DashboardPageState extends State<DashboardPage>
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: color, size: 24),
@@ -623,7 +581,7 @@ class _DashboardPageState extends State<DashboardPage>
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -718,7 +676,7 @@ class _DashboardPageState extends State<DashboardPage>
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -800,12 +758,12 @@ class _DashboardPageState extends State<DashboardPage>
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF4CAF50).withOpacity(0.3),
+          color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),

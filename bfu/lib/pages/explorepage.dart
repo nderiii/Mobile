@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bfu/services/stock_apis.dart';
 import 'package:bfu/pages/profilepage.dart';
-import 'package:bfu/pages/dashboard.dart';
-import 'package:bfu/pages/newspage.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -510,36 +508,6 @@ class _ExplorePageState extends State<ExplorePage>
                               ),
                       ),
                     ],
-                  ),
-
-                  // FLOATING BOTTOM NAV BAR
-                  Positioned(
-                    bottom: 50,
-                    left: 20,
-                    right: 20,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildNavItem(Icons.home, "Home", 0),
-                          _buildNavItem(Icons.explore, "Explore", 1),
-                          _buildNavItem(Icons.article, "News", 2),
-                          _buildNavItem(Icons.person_outline, "Profile", 3),
-                        ],
-                      ),
-                    ),
                   ),
                 ],
               ),
