@@ -46,5 +46,11 @@
     "name": "Ripple",
     "type": "crypto",
     "image": "assets/symbols/xrp.png"
+  },
+  {
+    "symbol":"NVDA",
+    "name":"NVIDIA Corp.",
+    "type":"stock",
+    "image":"assets/symbols/nvda.png"
   }
 ]
