@@ -309,203 +309,222 @@ class _ExplorePageState extends State<ExplorePage>
 
                       // ASSET LIST
                       Expanded(
-                        child: filteredSymbols.isEmpty
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                        child: RefreshIndicator(
+                          onRefresh: loadData,
+                          color: const Color(0xFF4CAF50),
+                          child: filteredSymbols.isEmpty
+                              ? ListView(
                                   children: [
-                                    Icon(
-                                      Icons.search_off,
-                                      size: 64,
-                                      color: Colors.grey[300],
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      'No assets found',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.grey[600],
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'Try adjusting your search or filters',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[400],
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                          0.4,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.search_off,
+                                            size: 64,
+                                            color: Colors.grey[300],
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Text(
+                                            'No assets found',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.grey[600],
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            'Try adjusting your search or filters',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[400],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
-                                ),
-                              )
-                            : ListView.builder(
-                                padding: const EdgeInsets.fromLTRB(
-                                  20,
-                                  12,
-                                  20,
-                                  100,
-                                ),
-                                itemCount: filteredSymbols.length,
-                                itemBuilder: (context, index) {
-                                  final item = filteredSymbols[index];
-                                  final isFavorite = favoriteSymbols.contains(
-                                    item["symbol"],
-                                  );
+                                )
+                              : ListView.builder(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    20,
+                                    12,
+                                    20,
+                                    100,
+                                  ),
+                                  itemCount: filteredSymbols.length,
+                                  itemBuilder: (context, index) {
+                                    final item = filteredSymbols[index];
+                                    final isFavorite = favoriteSymbols.contains(
+                                      item["symbol"],
+                                    );
 
-                                  return Container(
-                                    margin: const EdgeInsets.only(bottom: 12),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: isFavorite
-                                          ? Border.all(
-                                              color: const Color(
-                                                0xFFE91E63,
-                                              ).withOpacity(0.3),
-                                              width: 2,
-                                            )
-                                          : null,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.03),
-                                          blurRadius: 10,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: ListTile(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 8,
-                                          ),
-                                      leading: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFF5F5F5),
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: Image.asset(
-                                          item["image"],
-                                          width: 32,
-                                          height: 32,
-                                        ),
-                                      ),
-                                      title: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              item["name"],
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 15,
-                                              ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
+                                    return Container(
+                                      margin: const EdgeInsets.only(bottom: 12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: isFavorite
+                                            ? Border.all(
+                                                color: const Color(
+                                                  0xFFE91E63,
+                                                ).withOpacity(0.3),
+                                                width: 2,
+                                              )
+                                            : null,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.03,
                                             ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 3,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: item["type"] == "stock"
-                                                  ? const Color(
-                                                      0xFF2196F3,
-                                                    ).withOpacity(0.1)
-                                                  : const Color(
-                                                      0xFFFF9800,
-                                                    ).withOpacity(0.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                            ),
-                                            child: Text(
-                                              item["type"] == "stock"
-                                                  ? "STOCK"
-                                                  : "CRYPTO",
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                                color: item["type"] == "stock"
-                                                    ? const Color(0xFF2196F3)
-                                                    : const Color(0xFFFF9800),
-                                              ),
-                                            ),
+                                            blurRadius: 10,
+                                            offset: const Offset(0, 2),
                                           ),
                                         ],
                                       ),
-                                      subtitle: Text(
-                                        item["symbol"],
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                              vertical: 8,
+                                            ),
+                                        leading: Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFF5F5F5),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          child: Image.asset(
+                                            item["image"],
+                                            width: 32,
+                                            height: 32,
+                                          ),
                                         ),
-                                      ),
-                                      trailing: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                formatPrice(item["symbol"]),
+                                        title: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                item["name"],
                                                 style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 15,
                                                 ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                              const SizedBox(height: 4),
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 6,
-                                                      vertical: 2,
-                                                    ),
-                                                decoration: BoxDecoration(
-                                                  color: const Color(
-                                                    0xFFE8F5E9,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                ),
-                                                child: const Text(
-                                                  "+2.4%",
-                                                  style: TextStyle(
-                                                    color: Color(0xFF4CAF50),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 11,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(width: 8),
-                                          IconButton(
-                                            icon: Icon(
-                                              isFavorite
-                                                  ? Icons.favorite
-                                                  : Icons.favorite_border,
-                                              color: isFavorite
-                                                  ? const Color(0xFFE91E63)
-                                                  : Colors.grey,
                                             ),
-                                            onPressed: () =>
-                                                toggleFavorite(item["symbol"]),
+                                            const SizedBox(width: 8),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 3,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                color: item["type"] == "stock"
+                                                    ? const Color(
+                                                        0xFF2196F3,
+                                                      ).withOpacity(0.1)
+                                                    : const Color(
+                                                        0xFFFF9800,
+                                                      ).withOpacity(0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: Text(
+                                                item["type"] == "stock"
+                                                    ? "STOCK"
+                                                    : "CRYPTO",
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: item["type"] == "stock"
+                                                      ? const Color(0xFF2196F3)
+                                                      : const Color(0xFFFF9800),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        subtitle: Text(
+                                          item["symbol"],
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
                                           ),
-                                        ],
+                                        ),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  formatPrice(item["symbol"]),
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 6,
+                                                        vertical: 2,
+                                                      ),
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(
+                                                      0xFFE8F5E9,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          6,
+                                                        ),
+                                                  ),
+                                                  child: const Text(
+                                                    "+2.4%",
+                                                    style: TextStyle(
+                                                      color: Color(0xFF4CAF50),
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 11,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(width: 8),
+                                            IconButton(
+                                              icon: Icon(
+                                                isFavorite
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                color: isFavorite
+                                                    ? const Color(0xFFE91E63)
+                                                    : Colors.grey,
+                                              ),
+                                              onPressed: () => toggleFavorite(
+                                                item["symbol"],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
+                                    );
+                                  },
+                                ),
+                        ),
                       ),
                     ],
                   ),

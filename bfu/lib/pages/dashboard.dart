@@ -127,324 +127,346 @@ class _DashboardPageState extends State<DashboardPage>
 
   // HOME PAGE CONTENT
   Widget _buildHomePage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 35),
+    return RefreshIndicator(
+      onRefresh: loadDashboard,
+      color: const Color(0xFF4CAF50),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 35),
 
-          // HEADER
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Welcome Back",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+            // HEADER
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Welcome Back",
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "Investment Advisor",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 4),
-                  Text(
-                    "Investment Advisor",
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  child: const Icon(Icons.notifications_outlined),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+
+            // SEARCH BAR
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+              child: TextField(
+                onChanged: (value) {
+                  setState(() => searchQuery = value);
+                },
+                decoration: const InputDecoration(
+                  hintText: "Search stocks, crypto...",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                  icon: Icon(Icons.search, color: Colors.grey),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Icon(Icons.notifications_outlined),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 24),
-
-          // SEARCH BAR
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: TextField(
-              onChanged: (value) {
-                setState(() => searchQuery = value);
-              },
-              decoration: const InputDecoration(
-                hintText: "Search stocks, crypto...",
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none,
-                icon: Icon(Icons.search, color: Colors.grey),
-                contentPadding: EdgeInsets.symmetric(vertical: 16),
               ),
             ),
-          ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          // INVESTMENT BUDGET CARD
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+            // INVESTMENT BUDGET CARD
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Your Investment Budget",
-                          style: TextStyle(color: Colors.white70, fontSize: 14),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "\$5,000.00",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: -1,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Icon(
-                        Icons.account_balance_wallet,
-                        color: Colors.white,
-                        size: 32,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF81C784),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.check_circle,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          SizedBox(width: 4),
                           Text(
-                            "Moderate Risk",
+                            "Your Investment Budget",
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            "\$5,000.00",
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: 36,
                               fontWeight: FontWeight.bold,
-                              fontSize: 13,
+                              letterSpacing: -1,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        "8 Recommendations",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(15),
                         ),
+                        child: const Icon(
+                          Icons.account_balance_wallet,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF81C784),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              "Moderate Risk",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          "8 Recommendations",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // QUICK STATS
+            Row(
+              children: [
+                Expanded(
+                  child: _buildQuickStatCard(
+                    'Favorites',
+                    '12',
+                    Icons.favorite,
+                    const Color(0xFFE91E63),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildQuickStatCard(
+                    'Watchlist',
+                    '8',
+                    Icons.visibility,
+                    const Color(0xFF2196F3),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 32),
+
+            // RECOMMENDATIONS FOR YOU
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Recommended for You",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "Based on your preferences",
+                      style: TextStyle(fontSize: 13, color: Colors.grey),
+                    ),
+                  ],
+                ),
+                TextButton(onPressed: () {}, child: const Text("See All")),
+              ],
+            ),
+            const SizedBox(height: 12),
+
+            SizedBox(
+              height: 200,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                children: buildRecommendationCards(),
+              ),
+            ),
+
+            const SizedBox(height: 32),
+
+            // YOUR FAVORITES
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.favorite, color: Color(0xFFE91E63), size: 24),
+                    SizedBox(width: 8),
+                    Text(
+                      "Your Favorites",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
+                TextButton(onPressed: () {}, child: const Text("Manage")),
               ],
             ),
-          ),
+            const SizedBox(height: 12),
+            ...buildFavoriteTiles(),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 32),
 
-          // QUICK STATS
-          Row(
-            children: [
-              Expanded(
-                child: _buildQuickStatCard(
-                  'Favorites',
-                  '12',
-                  Icons.favorite,
-                  const Color(0xFFE91E63),
+            // TRENDING STOCKS
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.trending_up, color: Color(0xFF4CAF50), size: 24),
+                    SizedBox(width: 8),
+                    Text(
+                      "Trending Stocks",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildQuickStatCard(
-                  'Watchlist',
-                  '8',
-                  Icons.visibility,
-                  const Color(0xFF2196F3),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 32),
-
-          // RECOMMENDATIONS FOR YOU
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Recommended for You",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    "Based on your preferences",
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
-                ],
-              ),
-              TextButton(onPressed: () {}, child: const Text("See All")),
-            ],
-          ),
-          const SizedBox(height: 12),
-
-          SizedBox(
-            height: 200,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              children: buildRecommendationCards(),
+                TextButton(onPressed: () {}, child: const Text("View All")),
+              ],
             ),
-          ),
+            const SizedBox(height: 8),
+            ...buildMarketTiles(type: "stock"),
 
-          const SizedBox(height: 32),
+            const SizedBox(height: 24),
 
-          // YOUR FAVORITES
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(
-                children: [
-                  Icon(Icons.favorite, color: Color(0xFFE91E63), size: 24),
-                  SizedBox(width: 8),
-                  Text(
-                    "Your Favorites",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              TextButton(onPressed: () {}, child: const Text("Manage")),
-            ],
-          ),
-          const SizedBox(height: 12),
-          ...buildFavoriteTiles(),
-
-          const SizedBox(height: 32),
-
-          // TRENDING STOCKS
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(
-                children: [
-                  Icon(Icons.trending_up, color: Color(0xFF4CAF50), size: 24),
-                  SizedBox(width: 8),
-                  Text(
-                    "Trending Stocks",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              TextButton(onPressed: () {}, child: const Text("View All")),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ...buildMarketTiles(type: "stock"),
-
-          const SizedBox(height: 24),
-
-          // TRENDING CRYPTO
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(
-                children: [
-                  Icon(
-                    Icons.currency_bitcoin,
-                    color: Color(0xFFFF9800),
-                    size: 24,
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    "Trending Crypto",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              TextButton(onPressed: () {}, child: const Text("View All")),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ...buildMarketTiles(type: "crypto"),
-        ],
+            // TRENDING CRYPTO
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.currency_bitcoin,
+                      color: Color(0xFFFF9800),
+                      size: 24,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "Trending Crypto",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                TextButton(onPressed: () {}, child: const Text("View All")),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ...buildMarketTiles(type: "crypto"),
+          ],
+        ),
       ),
     );
   }

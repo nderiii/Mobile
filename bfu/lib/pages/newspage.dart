@@ -59,25 +59,29 @@ class _NewsPageState extends State<NewsPage>
     });
 
     try {
-      // Fetch stock and crypto news in parallel
-      final results = await Future.wait([
-        _newsApis.getNewsBySymbol('technology'),
-        _newsApis.getNewsBySymbol('blockchain'),
-      ]);
+      // Fetch financial news (covers both stocks and crypto)
+      print("📱 Fetching financial news...");
+      final news = await _newsApis.getNewsBySymbol('finance');
 
       setState(() {
-        stockNews = results[0];
-        cryptoNews = results[1];
-        // Combine all news for "All" filter
-        allNews = [...stockNews, ...cryptoNews];
+        // Use the same data for all categories to simplify
+        allNews = news;
+        stockNews = news;
+        cryptoNews = news;
         isLoading = false;
+
+        if (allNews.isEmpty) {
+          errorMessage = 'No news available. Please try again later.';
+        }
       });
+
+      print("✅ Total news loaded: ${allNews.length}");
     } catch (e) {
       setState(() {
         errorMessage = 'Failed to load news: $e';
         isLoading = false;
       });
-      print('Error fetching news: $e');
+      print('❌ Error fetching news: $e');
     }
   }
 
@@ -334,12 +338,18 @@ class _NewsPageState extends State<NewsPage>
           }
 
           // Get sentiment score as percentage
-          final sentimentScore =
-              firstTicker['ticker_sentiment_score'] as double?;
-          if (sentimentScore != null) {
-            final percentChange = (sentimentScore * 100).toStringAsFixed(1);
-            isPositive = sentimentScore >= 0;
-            changePercent = '${isPositive ? '+' : ''}$percentChange%';
+          final sentimentScoreString = firstTicker['ticker_sentiment_score'];
+          if (sentimentScoreString != null) {
+            try {
+              final sentimentScore = double.parse(
+                sentimentScoreString.toString(),
+              );
+              final percentChange = (sentimentScore * 100).toStringAsFixed(1);
+              isPositive = sentimentScore >= 0;
+              changePercent = '${isPositive ? '+' : ''}$percentChange%';
+            } catch (e) {
+              print('Error parsing sentiment score: $e');
+            }
           }
         }
 
