@@ -24,6 +24,90 @@
     "image": "assets/symbols/googl.png"
   },
   {
+    "symbol": "NVDA",
+    "name": "NVIDIA Corp.",
+    "type": "stock",
+    "image": "assets/symbols/nvda.png"
+  },
+  {
+    "symbol": "AMZN",
+    "name": "Amazon.com Inc.",
+    "type": "stock",
+    "image": "assets/symbols/amzn.png"
+  },
+  {
+    "symbol": "META",
+    "name": "Meta Platforms Inc.",
+    "type": "stock",
+    "image": "assets/symbols/meta.png"
+  },
+  {
+    "symbol": "NFLX",
+    "name": "Netflix Inc.",
+    "type": "stock",
+    "image": "assets/symbols/nflx.png"
+  },
+  {
+    "symbol": "AMD",
+    "name": "Advanced Micro Devices",
+    "type": "stock",
+    "image": "assets/symbols/amd.png"
+  },
+  {
+    "symbol": "INTC",
+    "name": "Intel Corporation",
+    "type": "stock",
+    "image": "assets/symbols/intc.png"
+  },
+  {
+    "symbol": "JPM",
+    "name": "JPMorgan Chase & Co.",
+    "type": "stock",
+    "image": "assets/symbols/jpm.png"
+  },
+  {
+    "symbol": "V",
+    "name": "Visa Inc.",
+    "type": "stock",
+    "image": "assets/symbols/v.png"
+  },
+  {
+    "symbol": "MA",
+    "name": "Mastercard Inc.",
+    "type": "stock",
+    "image": "assets/symbols/ma.png"
+  },
+  {
+    "symbol": "DIS",
+    "name": "The Walt Disney Company",
+    "type": "stock",
+    "image": "assets/symbols/dis.png"
+  },
+  {
+    "symbol": "COIN",
+    "name": "Coinbase Global Inc.",
+    "type": "stock",
+    "image": "assets/symbols/coin.png"
+  },
+  {
+    "symbol": "NKE",
+    "name": "Nike Inc.",
+    "type": "stock",
+    "image": "assets/symbols/nke.png"
+  },
+  {
+    "symbol": "PYPL",
+    "name": "PayPal Holdings Inc.",
+    "type": "stock",
+    "image": "assets/symbols/pypl.png"
+  },
+  {
+    "symbol": "BAC",
+    "name": "Bank of America Corp.",
+    "type": "stock",
+    "image": "assets/symbols/bac.png"
+  },
+  {
     "symbol": "BTC",
     "name": "Bitcoin",
     "type": "crypto",
@@ -36,10 +120,16 @@
     "image": "assets/symbols/eth.png"
   },
   {
-    "symbol": "DOGE",
-    "name": "Dogecoin",
+    "symbol": "BNB",
+    "name": "Binance Coin",
     "type": "crypto",
-    "image": "assets/symbols/doge.png"
+    "image": "assets/symbols/bnb.png"
+  },
+  {
+    "symbol": "SOL",
+    "name": "Solana",
+    "type": "crypto",
+    "image": "assets/symbols/sol.png"
   },
   {
     "symbol": "XRP",
@@ -48,9 +138,63 @@
     "image": "assets/symbols/xrp.png"
   },
   {
-    "symbol":"NVDA",
-    "name":"NVIDIA Corp.",
-    "type":"stock",
-    "image":"assets/symbols/nvda.png"
+    "symbol": "ADA",
+    "name": "Cardano",
+    "type": "crypto",
+    "image": "assets/symbols/ada.png"
+  },
+  {
+    "symbol": "DOGE",
+    "name": "Dogecoin",
+    "type": "crypto",
+    "image": "assets/symbols/doge.png"
+  },
+  {
+    "symbol": "MATIC",
+    "name": "Polygon",
+    "type": "crypto",
+    "image": "assets/symbols/matic.png"
+  },
+  {
+    "symbol": "DOT",
+    "name": "Polkadot",
+    "type": "crypto",
+    "image": "assets/symbols/dot.png"
+  },
+  {
+    "symbol": "AVAX",
+    "name": "Avalanche",
+    "type": "crypto",
+    "image": "assets/symbols/avax.png"
+  },
+  {
+    "symbol": "LINK",
+    "name": "Chainlink",
+    "type": "crypto",
+    "image": "assets/symbols/link.png"
+  },
+  {
+    "symbol": "LTC",
+    "name": "Litecoin",
+    "type": "crypto",
+    "image": "assets/symbols/ltc.png"
+  },
+  {
+    "symbol": "UNI",
+    "name": "Uniswap",
+    "type": "crypto",
+    "image": "assets/symbols/uni.png"
+  },
+  {
+    "symbol": "ATOM",
+    "name": "Cosmos",
+    "type": "crypto",
+    "image": "assets/symbols/atom.png"
+  },
+  {
+    "symbol": "SHIB",
+    "name": "Shiba Inu",
+    "type": "crypto",
+    "image": "assets/symbols/shib.png"
   }
 ]
