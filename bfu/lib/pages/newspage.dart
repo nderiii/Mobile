@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../services/news_apis.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -14,6 +15,16 @@ class _NewsPageState extends State<NewsPage>
   String selectedFilter = "All";
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+
+  // API Service instance
+  final NewsApis _newsApis = NewsApis();
+
+  // News data storage
+  List<dynamic> allNews = [];
+  List<dynamic> stockNews = [];
+  List<dynamic> cryptoNews = [];
+  bool isLoading = true;
+  String? errorMessage;
 
   // Mock favorite stocks/crypto
   final List<String> favoriteSymbols = ["AAPL", "BTC", "ETH", "TSLA"];
@@ -35,6 +46,39 @@ class _NewsPageState extends State<NewsPage>
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
     _animationController.forward();
+
+    // Fetch news data from API
+    _fetchNewsData();
+  }
+
+  /// Fetches news data from the Vantage API for different topics
+  Future<void> _fetchNewsData() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      // Fetch stock and crypto news in parallel
+      final results = await Future.wait([
+        _newsApis.getNewsBySymbol('technology'),
+        _newsApis.getNewsBySymbol('blockchain'),
+      ]);
+
+      setState(() {
+        stockNews = results[0];
+        cryptoNews = results[1];
+        // Combine all news for "All" filter
+        allNews = [...stockNews, ...cryptoNews];
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Failed to load news: $e';
+        isLoading = false;
+      });
+      print('Error fetching news: $e');
+    }
   }
 
   @override
@@ -46,6 +90,51 @@ class _NewsPageState extends State<NewsPage>
       overlays: SystemUiOverlay.values,
     );
     super.dispose();
+  }
+
+  /// Filters news based on the selected filter
+  List<dynamic> _getFilteredNews() {
+    if (isLoading || errorMessage != null) return [];
+
+    switch (selectedFilter) {
+      case "Stocks":
+        return stockNews;
+      case "Crypto":
+        return cryptoNews;
+      case "Favorites":
+        // Filter news that match favorite symbols
+        return allNews.where((news) {
+          final tickerSentiment = news['ticker_sentiment'] as List<dynamic>?;
+          if (tickerSentiment == null) return false;
+          return tickerSentiment.any(
+            (ticker) => favoriteSymbols.contains(ticker['ticker'] as String?),
+          );
+        }).toList();
+      case "All":
+      default:
+        return allNews;
+    }
+  }
+
+  /// Formats timestamp to relative time
+  String _getTimeAgo(String? timestamp) {
+    if (timestamp == null) return 'Recently';
+    try {
+      final newsTime = DateTime.parse(timestamp);
+      final difference = DateTime.now().difference(newsTime);
+
+      if (difference.inDays > 0) {
+        return '${difference.inDays} day${difference.inDays > 1 ? 's' : ''} ago';
+      } else if (difference.inHours > 0) {
+        return '${difference.inHours} hour${difference.inHours > 1 ? 's' : ''} ago';
+      } else if (difference.inMinutes > 0) {
+        return '${difference.inMinutes} minute${difference.inMinutes > 1 ? 's' : ''} ago';
+      } else {
+        return 'Just now';
+      }
+    } catch (e) {
+      return 'Recently';
+    }
   }
 
   @override
@@ -140,154 +229,143 @@ class _NewsPageState extends State<NewsPage>
 
                 // NEWS FEED
                 Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
-                    children: [
-                      // Priority Section - Favorites
-                      if (selectedFilter == "All" ||
-                          selectedFilter == "Favorites") ...[
-                        _buildSectionHeader(
-                          "Your Favorites",
-                          "Priority updates",
-                          Icons.favorite,
-                          const Color(0xFFE91E63),
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF4CAF50),
+                          ),
+                        )
+                      : errorMessage != null
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.error_outline,
+                                size: 64,
+                                color: Colors.grey[400],
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                errorMessage!,
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: _fetchNewsData,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF4CAF50),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 12,
+                                  ),
+                                ),
+                                child: const Text('Retry'),
+                              ),
+                            ],
+                          ),
+                        )
+                      : RefreshIndicator(
+                          onRefresh: _fetchNewsData,
+                          color: const Color(0xFF4CAF50),
+                          child: _buildNewsList(),
                         ),
-                        const SizedBox(height: 12),
-                        _buildNewsCard(
-                          title: "Apple Announces New AI Features",
-                          source: "AAPL",
-                          time: "2 hours ago",
-                          category: "Stock",
-                          description:
-                              "Apple Inc. unveils groundbreaking AI integration across all devices...",
-                          imageUrl: "assets/images/apple.png",
-                          isPriority: true,
-                          changePercent: "+2.4%",
-                          isPositive: true,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildNewsCard(
-                          title: "Bitcoin Hits New Monthly High",
-                          source: "BTC",
-                          time: "4 hours ago",
-                          category: "Crypto",
-                          description:
-                              "Bitcoin surges past key resistance level as institutional interest grows...",
-                          imageUrl: "assets/images/bitcoin.png",
-                          isPriority: true,
-                          changePercent: "+5.2%",
-                          isPositive: true,
-                        ),
-                        const SizedBox(height: 24),
-                      ],
-
-                      // Trending News
-                      if (selectedFilter == "All" ||
-                          selectedFilter == "Trending") ...[
-                        _buildSectionHeader(
-                          "Trending Now",
-                          "Hot topics",
-                          Icons.whatshot,
-                          const Color(0xFFFF9800),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildNewsCard(
-                          title: "Tech Sector Shows Strong Growth",
-                          source: "Market Watch",
-                          time: "5 hours ago",
-                          category: "Stock",
-                          description:
-                              "Technology stocks lead market rally with impressive gains...",
-                          imageUrl: null,
-                          isPriority: false,
-                          changePercent: "+1.8%",
-                          isPositive: true,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildNewsCard(
-                          title: "Ethereum 2.0 Update Progress",
-                          source: "ETH",
-                          time: "6 hours ago",
-                          category: "Crypto",
-                          description:
-                              "Major milestone reached in Ethereum's transition to proof-of-stake...",
-                          imageUrl: null,
-                          isPriority: false,
-                          changePercent: "+3.1%",
-                          isPositive: true,
-                        ),
-                        const SizedBox(height: 24),
-                      ],
-
-                      // General Market News
-                      if (selectedFilter == "All" ||
-                          selectedFilter == "Stocks") ...[
-                        _buildSectionHeader(
-                          "Stock Market",
-                          "Latest updates",
-                          Icons.trending_up,
-                          const Color(0xFF2196F3),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildNewsCard(
-                          title: "Federal Reserve Maintains Interest Rates",
-                          source: "Bloomberg",
-                          time: "8 hours ago",
-                          category: "Stock",
-                          description:
-                              "Fed keeps rates steady amid economic stability concerns...",
-                          imageUrl: null,
-                          isPriority: false,
-                          changePercent: null,
-                          isPositive: true,
-                        ),
-                        const SizedBox(height: 12),
-                        _buildNewsCard(
-                          title: "Energy Sector Faces Volatility",
-                          source: "CNBC",
-                          time: "10 hours ago",
-                          category: "Stock",
-                          description:
-                              "Oil prices fluctuate as global demand patterns shift...",
-                          imageUrl: null,
-                          isPriority: false,
-                          changePercent: "-1.2%",
-                          isPositive: false,
-                        ),
-                        const SizedBox(height: 24),
-                      ],
-
-                      // Crypto News
-                      if (selectedFilter == "All" ||
-                          selectedFilter == "Crypto") ...[
-                        _buildSectionHeader(
-                          "Cryptocurrency",
-                          "Digital assets",
-                          Icons.currency_bitcoin,
-                          const Color(0xFFFF9800),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildNewsCard(
-                          title: "New Regulations Impact Crypto Trading",
-                          source: "CoinDesk",
-                          time: "12 hours ago",
-                          category: "Crypto",
-                          description:
-                              "Government announces updated framework for digital asset exchanges...",
-                          imageUrl: null,
-                          isPriority: false,
-                          changePercent: null,
-                          isPositive: true,
-                        ),
-                      ],
-                    ],
-                  ),
                 ),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  /// Builds the news list from API data
+  Widget _buildNewsList() {
+    final filteredNews = _getFilteredNews();
+
+    if (filteredNews.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.article_outlined, size: 64, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            Text(
+              'No news available',
+              style: TextStyle(color: Colors.grey[600], fontSize: 16),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+      itemCount: filteredNews.length,
+      itemBuilder: (context, index) {
+        final newsItem = filteredNews[index];
+        final title = newsItem['title'] as String? ?? 'No Title';
+        final summary = newsItem['summary'] as String? ?? '';
+        final source = newsItem['source'] as String? ?? 'Unknown Source';
+        final timePublished = newsItem['time_published'] as String?;
+        final bannerImage = newsItem['banner_image'] as String?;
+
+        // Extract ticker information for category and change percent
+        final tickerSentiment = newsItem['ticker_sentiment'] as List<dynamic>?;
+        String category = 'Market';
+        String? changePercent;
+        bool isPositive = true;
+
+        if (tickerSentiment != null && tickerSentiment.isNotEmpty) {
+          final firstTicker = tickerSentiment[0];
+          final ticker = firstTicker['ticker'] as String?;
+
+          // Determine category based on ticker
+          if (ticker != null) {
+            if (['BTC', 'ETH', 'CRYPTO'].any((c) => ticker.contains(c))) {
+              category = 'Crypto';
+            } else {
+              category = 'Stock';
+            }
+          }
+
+          // Get sentiment score as percentage
+          final sentimentScore =
+              firstTicker['ticker_sentiment_score'] as double?;
+          if (sentimentScore != null) {
+            final percentChange = (sentimentScore * 100).toStringAsFixed(1);
+            isPositive = sentimentScore >= 0;
+            changePercent = '${isPositive ? '+' : ''}$percentChange%';
+          }
+        }
+
+        // Check if this news is about a favorite symbol
+        final isPriority =
+            tickerSentiment?.any(
+              (ticker) => favoriteSymbols.contains(ticker['ticker'] as String?),
+            ) ??
+            false;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: _buildNewsCard(
+            title: title,
+            source: source,
+            time: _getTimeAgo(timePublished),
+            category: category,
+            description: summary,
+            imageUrl: bannerImage,
+            isPriority: isPriority,
+            changePercent: changePercent,
+            isPositive: isPositive,
+            newsUrl: newsItem['url'] as String?,
+          ),
+        );
+      },
     );
   }
 
@@ -364,6 +442,7 @@ class _NewsPageState extends State<NewsPage>
     required bool isPriority,
     String? changePercent,
     required bool isPositive,
+    String? newsUrl,
   }) {
     return Container(
       decoration: BoxDecoration(
