@@ -1,4 +1,5 @@
 import 'package:bfu/pages/signuppage.dart';
+import 'package:bfu/pages/forgot_password_page.dart';
 import 'package:bfu/services/supabase_apis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -266,7 +267,13 @@ class _LoginpageState extends State<Loginpage> {
                               onPressed: isLoading
                                   ? null
                                   : () {
-                                      // Forgot password logic
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ForgotPasswordPage(),
+                                        ),
+                                      );
                                     },
                               child: const Text(
                                 "Forgot Password?",
