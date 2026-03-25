@@ -15,6 +15,14 @@ A Flutter mobile application for tracking stocks and cryptocurrency markets in r
 
 ---
 
+## App Screenshots
+
+| Login | Dashboard | Explore | Profile |
+|:---:|:---:|:---:|:---:|
+| <img src="images/screenshot_login.png" width="200"/> | <img src="images/screenshot_dashboard.png" width="200"/> | <img src="images/screenshot_explore.png" width="200"/> | <img src="images/screenshot_profile.png" width="200"/> |
+
+---
+
 ## Tech Stack
 
 | Layer        | Technology                        |
